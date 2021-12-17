@@ -1,0 +1,41 @@
+.container {
+  padding: 0 2rem;
+}
+
+.small {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.large {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media screen and (max-width: 600px) {
+  .small {
+    grid-template-columns: 1fr;
+  }
+  .large {
+    grid-template-columns: 1fr;
+  }
+}
+
+.title {
+  font-size: 2rem;
+  text-transform: uppercase;
+  margin: 0 1rem 1rem;
+}
+
+.container {
+  padding: 0 2rem;
+  margin-bottom: 2rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2.5rem 1rem;
+  place-items: center;
+}
+
