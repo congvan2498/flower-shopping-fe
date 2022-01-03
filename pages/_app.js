@@ -1,9 +1,9 @@
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import store from '../redux/store';
 import '../styles/globals.css';
-import React,{useEffect} from "react";
+import React, {useEffect} from "react";
 import {useRouter} from "next/router";
 import {unstable_createMuiStrictModeTheme} from "@material-ui/core";
 
@@ -70,7 +70,21 @@ export var theme = unstable_createMuiStrictModeTheme({
     },
 });
 
-function MyApp({ Component, pageProps }) {
+let menu = [
+    {
+        key: "DELIVERY",
+        name: "Trang Chủ",
+        link: ``,
+    },
+    {
+        key: "CART",
+        name: "Giỏ hàng",
+        link: `/cart`,
+    },
+
+];
+
+function MyApp({Component, pageProps}) {
     const router = useRouter();
     const [showLoader, setShowLoader] = React.useState(true);
     const [showBackdrop, setShowBackdrop] = React.useState(false);
@@ -91,15 +105,13 @@ function MyApp({ Component, pageProps }) {
             router.events.off("routeChangeError", routeChangeComplete);
         };
     }, []);
-  return (
-    <Provider store={store}>
-      <div className="wrapper">
-          <Navbar />
-          <Component {...pageProps} />
-          <Footer />
-      </div>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <div className="wrapper">
+                <Component {...pageProps} />
+            </div>
+        </Provider>
+    );
 }
 
 export default MyApp;

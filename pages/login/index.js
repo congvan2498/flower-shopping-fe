@@ -1,6 +1,8 @@
 import styles from "./login.module.css";
 import Head from "next/head";
 import { Box, Button, NoSsr, Paper, TextField } from "@material-ui/core";
+import Navbar from "../../components/Navbar";
+import {parseBody} from "next/dist/next-server/server/api-utils";
 /*
 Login page that is used on stg/uat/prd is only run from internal-hrm code repo.
 'Login.js' file of other repos is only used for local testing.
@@ -11,25 +13,20 @@ This file have 2 ways to use:
 */
 export async function getServerSideProps(ctx) {
     let returnObject = { props: {} };
+
     if (ctx.req && ctx.req.method === "POST") {
         // read form data
         let body = await parseBody(ctx.req, "1kb");
-        console.log(body);
-
-        if (!body.username || !body.password) {
-            returnObject.props.errorCode = "EMPTY_INPUT";
-        }
 
         // call backend API
         const response = await fetch(
-            `${process.env.API_HOST}/core/account/v1/authentication`,
+            `https://d29e-171-252-153-245.ngrok.io/login`,
             {
                 method: "POST",
                 contentType: "application/json",
                 body: JSON.stringify({
-                    username: body.username,
-                    password: body.password,
-                    type: "EMPLOYEE",
+                    username: "congvan2",
+                    password: "123",
                 }),
                 headers: {
                     "User-Agent": ctx.req.headers["user-agent"],
@@ -37,24 +34,27 @@ export async function getServerSideProps(ctx) {
                 },
             }
         );
-        const result = await response.json();
-        // if OK, do set cookie & redirect page to relative target
-        if (result.status === "OK") {
-            let data = result.data[0];
-            let url = "/logistic";
-            let res = ctx.res;
-            res.setHeader(
-                "set-cookie",
-                `session_token=${data.bearerToken}; Path=/; HttpOnly`
-            );
-            res.setHeader("location", url);
-            res.statusCode = 302;
-            res.end();
-        } else {
-            returnObject.props.errorCode = result.errorCode;
-        }
 
-        returnObject.props.url = body.url;
+        console.info(response)
+
+        // const result = await response.json();
+        // // if OK, do set cookie & redirect page to relative target
+        // if (result.status === "OK") {
+        //     let data = result.data[0];
+        //     let url = "";
+        //     let res = ctx.res;
+        //     res.setHeader(
+        //         "set-cookie",
+        //         `session_token=${data.token}; Path=/; HttpOnly`
+        //     );
+        //     res.setHeader("location", url);
+        //     res.statusCode = 302;
+        //     res.end();
+        // } else {
+        //     returnObject.props.errorCode = result.errorCode;
+        // }
+        //
+        // returnObject.props.url = body.url;
     }
     return returnObject;
 }
@@ -70,7 +70,6 @@ LoginForm has basic inputs of authentication flow:
 */
 export default function LoginPage(props) {
     let msg = "";
-    console.log(msg);
     if (props.errorCode) {
         switch (props.errorCode) {
             case "EMPTY_INPUT":
@@ -92,63 +91,64 @@ export default function LoginPage(props) {
     }
     return (
         <div>
-            <Head>
-                <title>Đăng nhập vào hệ thống nội bộ</title>
-            </Head>
-            <Paper className={styles.loginForm}>
-                <p>
-                    <img src="/company_logo.svg" />
-                </p>
-                <NoSsr>
-                    <form method="POST" action="/login">
-                        <input type="hidden" name="url" value={props.url} />
-                        <Box>
-                            <TextField
-                                id="username"
-                                label="Tên tài khoản"
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                className={styles.loginInput}
-                                autoFocus={true}
-                                name="username"
-                                inputRef={(input) => input && input.focus()}
-                            />
-                        </Box>
-                        <Box>
-                            <TextField
-                                id="password"
-                                label="Mật khẩu"
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                className={styles.loginInput}
-                                name="password"
-                                type="password"
-                            />
-                        </Box>
-                        {msg && (
-                            <Box
-                                style={{ color: "red", fontSize: "85%", padding: "3px 10px" }}
-                            >
-                                {msg}
+            <Navbar />
+            <div>
+                <Head>
+                    <title>Đăng nhập vào Hệ thống Hoa Yêu Thương</title>
+                </Head>
+                <Paper className={styles.loginForm}>
+                    <NoSsr>
+                        <form method="POST" action="/login">
+                            <input type="hidden" name="url" value={props.url} />
+                            <Box>
+                                <TextField
+                                    id="username"
+                                    label="Tên tài khoản"
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    className={styles.loginInput}
+                                    autoFocus={true}
+                                    name="username"
+                                    inputRef={(input) => input && input.focus()}
+                                />
                             </Box>
-                        )}
-                        <Box className={styles.loginFormGroup}>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                className={styles.loginButton}
-                            >
-                                Đăng nhập
-                            </Button>
-                        </Box>
-                    </form>
-                </NoSsr>
-            </Paper>
+                            <Box>
+                                <TextField
+                                    id="password"
+                                    label="Mật khẩu"
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    className={styles.loginInput}
+                                    name="password"
+                                    type="password"
+                                />
+                            </Box>
+                            {msg && (
+                                <Box
+                                    style={{ color: "red", fontSize: "85%", padding: "3px 10px" }}
+                                >
+                                    {msg}
+                                </Box>
+                            )}
+                            <Box className={styles.loginFormGroup}>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    className={styles.loginButton}
+                                >
+                                    Đăng nhập
+                                </Button>
+                            </Box>
+                        </form>
+                    </NoSsr>
+                </Paper>
+            </div>
+
         </div>
     );
 }

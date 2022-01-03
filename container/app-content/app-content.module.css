@@ -1,0 +1,20 @@
+.contentWrapper {
+    display: block;
+    width: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+    .content {
+        padding: 14px;
+    }
+    .noMenu .content {
+        padding-left: 14px !important;
+    }
+}
+
+@media only screen and (max-width: 599.99px) {
+    .contentWrapper {
+        padding: 12px;
+    }
+    .content {}
+}

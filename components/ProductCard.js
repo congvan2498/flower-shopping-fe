@@ -2,23 +2,23 @@ import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/cart.slice';
 import styles from '../styles/ProductCard.module.css';
+import {Card} from "@mui/material";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className={styles}>
-      <Image src="/fea4.png" height={300} width={220} />
+    <Card style={{padding : "1rem"}}>
+      <Image src="/fea4.png" height={200} width={200} />
       <h4 className={styles.title}>{product.product}</h4>
-      <h5 className={styles.category}>{product.category}</h5>
-      <p>$ {product.price}</p>
+      <p style={{color: "red"}}>$ {product.price}</p>
       <button
         onClick={() => dispatch(addToCart(product))}
         className={styles.button}
       >
-        Add to Cart
+        Thêm vào giỏ hàng
       </button>
-    </div>
+    </Card>
   );
 };
 

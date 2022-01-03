@@ -3,11 +3,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
+  cursor:pointer;
+  background: #f7f7f7;
 }
 
 .logo {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1rem;
   text-transform: uppercase;
 }
 
